@@ -8,8 +8,6 @@ CREATE TABLE `Lands` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -20,7 +18,7 @@ CREATE TABLE `Lands` (
 
 LOCK TABLES `Lands` WRITE;
 /*!40000 ALTER TABLE `Lands` DISABLE KEYS */;
-INSERT INTO `Lands` VALUES ('Forest', NULL, 'Forest', NULL, 'John Avon', 'Common');
+INSERT INTO `Lands` VALUES ('Choked Estuary', 'Shadows over Innistrad', 'Island Swamp', 'Rare');
 /*!40000 ALTER TABLE `Lands` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -34,10 +32,7 @@ DROP TABLE IF EXISTS `Artifacts`;
 CREATE TABLE `Artifacts` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
-  `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
   `cost` int(20) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -48,7 +43,7 @@ CREATE TABLE `Artifacts` (
 
 LOCK TABLES `Artifacts` WRITE;
 /*!40000 ALTER TABLE `Artifacts` DISABLE KEYS */;
-INSERT INTO `Artifacts` VALUES ('Accorders Schield', NULL, 'Artifact', 'Equipped creature gets...', 0, 'Alan Potwalk', NULL);
+INSERT INTO `Artifacts` VALUES ('Brain in a Jar', 'Shadows over Innistrad', 2, 'Rare');
 /*!40000 ALTER TABLE `Artifacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -61,13 +56,11 @@ DROP TABLE IF EXISTS `Creatures`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Creatures` (
   `name` char(20) DEFAULT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `power` int(11) DEFAULT NULL,
   `toughness` int(11) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -78,7 +71,7 @@ CREATE TABLE `Creatures` (
 
 LOCK TABLES `Creatures` WRITE;
 /*!40000 ALTER TABLE `Creatures` DISABLE KEYS */;
-INSERT INTO `Creatures` VALUES ('Ambassador Laquatus', NULL, 'Merfolk', 'Target player puts the top three...', 3, 1, 3, 'Jim Murray', 'Common');
+INSERT INTO `Creatures` VALUES ('Abberant Researcher', 'Shadows over Innistrad', 'Human Insect', 4, 3, 2, 'Uncommon'), ('Accursed Witch', 'Shadows over Innistrad', 'Human Shaman', 4, 4, 2, 'Uncommon'), ('Altered Ego', 'Shadows over Innistrad', 'Shapeshifter', 4, 0, 0, 'Rare'), ('Angel of Deliverance', 'Shadows over Innistrad', 'Angel', 8, 6, 6, 'Rare'), ('Apothecary Geist', 'Shadows over Innistrad', 'Spirit', 4, 2, 3, 'Common') ;
 /*!40000 ALTER TABLE `Creatures` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -92,9 +85,7 @@ CREATE TABLE `Enchantments` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -105,7 +96,7 @@ CREATE TABLE `Enchantments` (
 
 LOCK TABLES `Enchantments` WRITE;
 /*!40000 ALTER TABLE `Enchanment` DISABLE KEYS */;
-INSERT INTO `Enchantments` VALUES ('Celestial Mantle', NULL, 'Aura','Enchanment creature gets...', 6, 'Steve Argyle', 'Rare');
+INSERT INTO `Enchantments` VALUES ('Always Watching', 'Shadows over Innistrad', NULL, 3, 'Rare');
 /*!40000 ALTER TABLE `Enchantment` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,10 +110,7 @@ DROP TABLE IF EXISTS `Sorceries`;
 CREATE TABLE `Sorceries` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
-  `subtype` string(20) DEFAULT NULL,
-  `text` string(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -133,7 +121,7 @@ CREATE TABLE `Sorceries` (
 
 LOCK TABLES `Sorceries` WRITE;
 /*!40000 ALTER TABLE `Sorceries` DISABLE KEYS */;
-INSERT INTO `Sorceries` VALUES ('Lava Axe', NULL, 'fire', 'Lava Axe deals 5 damage to target player', 5, 'IdK', 'Common');
+INSERT INTO `Sorceries` VALUES ('Alms of the Vein', 'Shadows over Innistrad', 3, 'Common'), ('Angelic Purge', 'Shadows over Innistrad', 3, 'Common');
 /*!40000 ALTER TABLE `Sorceries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,10 +134,7 @@ DROP TABLE IF EXISTS `Instants`;
 CREATE TABLE `Instants` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
-  `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -160,7 +145,7 @@ CREATE TABLE `Instants` (
 
 LOCK TABLES `Instants` WRITE;
 /*!40000 ALTER TABLE `Instants` DISABLE KEYS */;
-INSERT INTO `Instants` VALUES ('Shock', NULL, 'lightning', 'Shock deals 2 damage to target creature or player', 1, 'Jon Foster', 'Common');
+INSERT INTO `Instants` VALUES ('Aim High', 'Shadows over Innistrad', 2, 'Common'), ('Anguished Unmaking', 'Shadows over Innistrad', 3, 'Rare');
 /*!40000 ALTER TABLE `Instants` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -173,11 +158,8 @@ DROP TABLE IF EXISTS `Planeswalker`;
 CREATE TABLE `Planeswalker` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
-  `subtype` char(20) DEFAULT NULL,
-  `text` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
-  `artist` char(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -188,7 +170,7 @@ CREATE TABLE `Planeswalker` (
 
 LOCK TABLES `Planeswalker` WRITE;
 /*!40000 ALTER TABLE `Planeswalker` DISABLE KEYS */;
-INSERT INTO `Planeswalker` VALUES ('Ajane Goldmane', NULL, 'Ajani', 4, 4, 'Aleksi Briclot', 'Mythic Rare');
+INSERT INTO `Planeswalker` VALUES ('Arlinn Kord', 'Shadows over Innistrad', 4, 3, 'Mythic Rare');
 /*!40000 ALTER TABLE `Planeswalker` ENABLE KEYS */;
 UNLOCK TABLES;
 
