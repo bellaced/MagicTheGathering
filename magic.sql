@@ -8,7 +8,8 @@ CREATE TABLE `Lands` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -33,7 +34,8 @@ CREATE TABLE `Artifacts` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(20) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -61,7 +63,8 @@ CREATE TABLE `Creatures` (
   `cost` int(11) DEFAULT NULL,
   `power` int(11) DEFAULT NULL,
   `toughness` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +89,8 @@ CREATE TABLE `Enchantments` (
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,7 +115,8 @@ CREATE TABLE `Sorceries` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -135,7 +140,8 @@ CREATE TABLE `Instants` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,7 +166,8 @@ CREATE TABLE `Planeswalker` (
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  'filePath' char(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -185,3 +192,15 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-10-13 21:20:58
+
+-- procedures
+
+CREATE PROCEDURE SearchAllByName(IN inputName CHAR(50))
+SELECT imagePath
+FROM *
+WHERE name like '%' + inputName + '%'
+
+CREATE PROCEDURE SearchAllByNameAndCost(IN inputName Char(50), IN inputCost INT)
+SELECT imagePath
+FROM *
+WHERE name like '%' + inputName + '%' AND inputCost = cost
