@@ -3,20 +3,49 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication1;
-
+package MagicGUI;
+//import com.sun.istack.internal.logging.Logger;
+import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.sql.*;
+import javax.management.Query;
 /**
  *
  * @author bellaceds
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+    private Object ex;
+
+
+    public Connection getConnection() {
+        Connection conn = null; 
+        
+        try{
+           conn = DriverManager.getConnection("jdbc:mysql://localhost/magicthegathering", "root", "");
+           //System.out.println("Connected");
+           
+        }catch(SQLException e){
+           Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return conn;
+        
+    /*public static void main(String[] args) {
         // TODO code application logic here
-        new MainPage().setVisible(true);
+       new MainPage().setVisible(true);
+       
+       Connection conn = null;
+       
+       try{
+           conn = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
+           System.out.println("Connected");
+           
+       }catch(SQLException e){
+           System.err.println(e);
+       }
     }
-    
+ */  
+    }
 }
