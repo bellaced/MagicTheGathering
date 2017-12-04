@@ -1,15 +1,33 @@
+-- MySQL dump 10.13  Distrib 5.7.19, for macos10.12 (x86_64)
+--
+-- Host: localhost    Database: magicthegathering
+-- ------------------------------------------------------
+-- Server version 5.7.19
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `Lands`
+--
 
 
 DROP TABLE IF EXISTS `Lands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Lands` (
-  `name` char(20) DEFAULT NULL,
-  `set` char(20) DEFAULT NULL,
-  `subtype` char(20) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  'filePath' char(50) DEFAULT NULL
+  `name` char(50) DEFAULT NULL,
+  `set` char(50) DEFAULT NULL,
+  `subtype` char(30) DEFAULT NULL,
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -34,8 +52,7 @@ CREATE TABLE `Artifacts` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(20) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,8 +80,7 @@ CREATE TABLE `Creatures` (
   `cost` int(11) DEFAULT NULL,
   `power` int(11) DEFAULT NULL,
   `toughness` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,8 +105,7 @@ CREATE TABLE `Enchantments` (
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -99,9 +114,9 @@ CREATE TABLE `Enchantments` (
 --
 
 LOCK TABLES `Enchantments` WRITE;
-/*!40000 ALTER TABLE `Enchanment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `Enchantments` DISABLE KEYS */;
 INSERT INTO `Enchantments` VALUES ('Always Watching', 'Shadows over Innistrad', NULL, 3, 'Rare'), ('Behind the Scenes', 'Shadows over Innistrad', NULL, 3, 'Uncommon'), ('Bound by Moonsilver', 'Shadows over Innistrad', 'Aura', 3, 'Uncommon');
-/*!40000 ALTER TABLE `Enchantment` ENABLE KEYS */;
+/*!40000 ALTER TABLE `Enchantments` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -115,8 +130,7 @@ CREATE TABLE `Sorceries` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,8 +154,7 @@ CREATE TABLE `Instants` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -166,8 +179,7 @@ CREATE TABLE `Planeswalker` (
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL,
-  `filePath` char(50) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -196,37 +208,37 @@ UNLOCK TABLES;
 -- procedures
 
 CREATE PROCEDURE SearchAllByNameAndCost(IN inputName Char(50), IN inputCost INT)
-SELECT imagePath
+SELECT name
 FROM Lands, Planeswalker, Artifacts, Creatures, Sorceries, Enchantments, Instants
 WHERE (name like ('%' + inputName + '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL);
 
 CREATE PROCEDURE SearchEnchantments(IN inputName CHAR(50), IN inputCost INT, IN inputSubtype CHAR(50))
-SELECT imagePath
+SELECT name
 FROM Enchantments
 WHERE (inputName IS NULL OR name = inputName) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
 
 CREATE PROCEDURE CreatureSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT, inputPower INT, IN inputToughness INT)
-SELECT imagepath
+SELECT name
 FROM Creature
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR costs = inputCost);
 
 CREATE PROCEDURE ArtifactSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT)
-SELECT imagepath
+SELECT name
 FROM Artifact
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost);
 
 CREATE PROCEDURE LandSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50))
-SELECT imagepath
+SELECT name
 FROM Land
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
 
 CREATE PROCEDURE PlaneswalkerSearch(IN inputName CHAR(50),IN inputCost INT, IN inputLoyalty INT)
-SELECT imagepath
+SELECT name
 FROM Planeswalker
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputLoyalty IS NULL OR loyalty = inputLoyalty);
 
 CREATE PROCEDURE SorcerySearch(IN inputName CHAR(50), IN inputCost INT)
-SELECT imagepath
+SELECT name
 FROM Sorceries
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%'))  AND (inputCost IS NULL OR costs = inputCost);
 
@@ -234,3 +246,6 @@ CREATE PROCEDURE InstantSearch(IN inputName CHAR(50), IN inputCost INT)
 SELECT imagepath
 FROM Instant
 WHERE (inputName IS NULL OR name like ('%' + inputName + '%'))  AND (inputCost IS NULL OR costs = inputCost);
+
+
+

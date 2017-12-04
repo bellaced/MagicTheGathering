@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.sql.*;
+import static java.sql.DriverManager.getConnection;
 import javax.management.Query;
 /**
  *
@@ -19,33 +20,33 @@ public class Main {
 
     private Object ex;
 
-
-    public Connection getConnection() {
-        Connection conn = null; 
         
-        try{
-           conn = DriverManager.getConnection("jdbc:mysql://localhost/magicthegathering", "root", "");
-           //System.out.println("Connected");
-           
-        }catch(SQLException e){
-           Logger.getLogger(Query.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return conn;
-        
-    /*public static void main(String[] args) {
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
         // TODO code application logic here
-       new MainPage().setVisible(true);
-       
-       Connection conn = null;
-       
-       try{
-           conn = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
-           System.out.println("Connected");
-           
-       }catch(SQLException e){
-           System.err.println(e);
-       }
-    }
- */  
+        new MainPage().setVisible(true);
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        CallableStatement cs;
+        
+    
+        try {
+            conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost/MagicTheGathering?" +
+            "user=root&password=BeLLaceds1996");
+            // Do something with the connection.
+            stmt = conn.createStatement();
+        }
+        catch (SQLException ex) {
+            // Handle any SQL errors.
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());       
+    
+        }
     }
 }

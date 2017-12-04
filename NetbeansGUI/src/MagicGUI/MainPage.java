@@ -7,6 +7,16 @@ package MagicGUI;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import javax.swing.ComboBoxModel;
 
 /**
  *
@@ -19,15 +29,25 @@ public class MainPage extends javax.swing.JFrame {
      * Creates new form MainPage
      */
     
+        Connection conn;
+        Statement stmt;
+        ResultSet rs;
+        CallableStatement cs;
+        
     
     public MainPage() {
         initComponents();
 
-
+        Connection conn;
+        Statement stmt;
+        ResultSet rs;
+        CallableStatement cs;
+                
         extraBox1.setVisible(false);
         extraBox2.setVisible(false);
-        typeSearch.setVisible(false);
-        
+        subtypeSearch.setVisible(false);
+        label1.setVisible(false);
+        label2.setVisible(false);
     }
 
     /**
@@ -44,13 +64,17 @@ public class MainPage extends javax.swing.JFrame {
         costDropDown = new javax.swing.JComboBox<>();
         typeComboBox = new javax.swing.JComboBox<>();
         TypeLabel = new javax.swing.JLabel();
-        typeSearch = new javax.swing.JTextField();
+        subtypeSearch = new javax.swing.JTextField();
         Cost = new javax.swing.JLabel();
         extraBox1 = new javax.swing.JComboBox<>();
         extraBox2 = new javax.swing.JComboBox<>();
+        label1 = new javax.swing.JLabel();
+        label2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setSize(new java.awt.Dimension(84, 84));
+        getContentPane().setLayout(null);
 
         cardNameText.setText("Name");
         cardNameText.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -63,8 +87,17 @@ public class MainPage extends javax.swing.JFrame {
                 cardNameTextActionPerformed(evt);
             }
         });
+        getContentPane().add(cardNameText);
+        cardNameText.setBounds(12, 41, 366, 45);
 
         jButton1.setText("Go");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(457, 523, 138, 52);
 
         costDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "no preference", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
         costDropDown.addActionListener(new java.awt.event.ActionListener() {
@@ -72,205 +105,488 @@ public class MainPage extends javax.swing.JFrame {
                 costDropDownActionPerformed(evt);
             }
         });
+        getContentPane().add(costDropDown);
+        costDropDown.setBounds(12, 401, 366, 40);
 
         typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Unspecified", "Artifacts", "Creatures", "Enchantments", "Instants", "Lands", "Planeswalker", "Sorceries" }));
+        typeComboBox.setMaximumSize(new java.awt.Dimension(366, 45));
         typeComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 typeComboBoxActionPerformed(evt);
             }
         });
+        getContentPane().add(typeComboBox);
+        typeComboBox.setBounds(12, 132, 366, 45);
 
         TypeLabel.setText("Type");
+        getContentPane().add(TypeLabel);
+        TypeLabel.setBounds(12, 94, 978, 31);
 
-        typeSearch.setText("Subtype");
-        typeSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+        subtypeSearch.setText("Subtype");
+        subtypeSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                typeSearchFocusGained(evt);
+                subtypeSearchFocusGained(evt);
             }
         });
-        typeSearch.addActionListener(new java.awt.event.ActionListener() {
+        subtypeSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                typeSearchActionPerformed(evt);
+                subtypeSearchActionPerformed(evt);
             }
         });
+        getContentPane().add(subtypeSearch);
+        subtypeSearch.setBounds(457, 132, 318, 45);
 
         Cost.setText("Cost");
+        getContentPane().add(Cost);
+        Cost.setBounds(12, 378, 366, 16);
 
+        extraBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Unspecified", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         extraBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extraBox1ActionPerformed(evt);
             }
         });
+        getContentPane().add(extraBox1);
+        extraBox1.setBounds(12, 224, 366, 44);
 
+        extraBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Unspecified", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         extraBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extraBox2ActionPerformed(evt);
             }
         });
+        getContentPane().add(extraBox2);
+        extraBox2.setBounds(12, 315, 366, 45);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(TypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-                        .addGap(692, 692, 692))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(extraBox2, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(typeComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Cost, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(extraBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(costDropDown, javax.swing.GroupLayout.Alignment.LEADING, 0, 366, Short.MAX_VALUE)
-                            .addComponent(cardNameText, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(typeSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(316, 316, 316))
+        label1.setText("label1");
+        getContentPane().add(label1);
+        label1.setBounds(12, 195, 366, 16);
+
+        label2.setText("Toughness");
+        getContentPane().add(label2);
+        label2.setBounds(12, 286, 366, 16);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(cardNameText, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24)
-                .addComponent(TypeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(typeComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                    .addComponent(typeSearch))
-                .addGap(27, 27, 27)
-                .addComponent(extraBox1, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                .addGap(33, 33, 33)
-                .addComponent(extraBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(Cost)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(costDropDown, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(493, 0, 100, 100);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cardNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cardNameTextActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
 
-        cardNameText.setSize(366, 35);
-    }//GEN-LAST:event_cardNameTextActionPerformed
+        Object selectedType = typeComboBox.getSelectedItem();
+        selectedType.toString();
+
+        //int selectedCost = Integer.valueOf((String)costDropDown.getSelectedItem());
+        //int selectedBox1 = Integer.valueOf((String)extraBox1.getSelectedItem());
+        //int selectedBox2 = Integer.valueOf((String)extraBox2.getSelectedItem());        
+        
+        int selectedCost = costDropDown.getSelectedIndex();    
+        int selectedBox1 = extraBox1.getSelectedIndex(); 
+        int selectedBox2 = extraBox2.getSelectedIndex(); 
+        
+        //sets value of unpecified to null, other values set to index -1 in order to set value to itself
+        selectedCost -= 1;
+        selectedBox1 -= 1;
+        selectedBox2 -= 1;
+                
+        
+        
+        
+        
+        //start of if else based on selection at button 
+        if (selectedType == "Unspecified")
+        {
+
+            try{
+                
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                
+                }
+                else{
+                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                }
+                cs.executeQuery();
+                
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+
+        }
+        if (selectedType == "Artifacts")
+        {
+            try{
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                }
+                else{
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    cs.setInt("inputCost", selectedCost);                    
+                }
+                cs.executeQuery();
+
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }            
+            
+        }
+        if (selectedType == "Creatures")
+        {
+            try{
+                
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    //cs.setInt("inputCost", selectedCost);
+                    cs.setInt("inputPower", selectedBox1);
+                    cs.setInt("inputToughness", selectedBox2);  
+                }
+                else if(selectedBox1 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,NULL,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    //cs.setInt("inputPower", selectedBox1);
+                    cs.setInt("inputToughness", selectedBox2);                  
+                }
+                else if(selectedBox2 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    cs.setInt("inputPower", selectedBox1);
+                    //cs.setInt("inputToughness", selectedBox2);                     
+                }
+                else if(selectedCost == -1 && selectedBox1 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,NULL,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    //cs.setInt("inputCost", selectedCost);
+                    //cs.setInt("inputPower", selectedBox1);
+                    cs.setInt("inputToughness", selectedBox2);                     
+                }     
+                else if(selectedBox1 == -1 && selectedBox2 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,NULL,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    //cs.setInt("inputPower", selectedBox1);
+                    //cs.setInt("inputToughness", selectedBox2);                     
+                }      
+                else if(selectedCost == -1 && selectedBox2 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    //cs.setInt("inputCost", selectedCost);
+                    cs.setInt("inputPower", selectedBox1);
+                    //cs.setInt("inputToughness", selectedBox2);                     
+                }                
+                else if(selectedCost == -1 && selectedBox1 == -1 && selectedBox2 == -1){
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,NULL,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    //cs.setInt("inputCost", selectedCost);
+                    //cs.setInt("inputPower", selectedBox1);
+                    //cs.setInt("inputToughness", selectedBox2);                     
+                }                
+                else{
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    cs.setInt("inputPower", selectedBox1);
+                    cs.setInt("inputToughness", selectedBox2);                     
+                }                
+                cs.executeQuery();
+
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }       
+
+        }
+        if (selectedType == "Enchantments")
+        {
+            try{
+                
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call SearchEnchantments(?,NULL,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubtype", subtypeSearch.getText());
+                
+                }
+                else{
+                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    cs.setString("inputSubtype", subtypeSearch.getText());                    
+                }
+                cs.executeQuery();
+                
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+        if (selectedType == "Instants")
+        {
+            try{
+                
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call InstantSearch(?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+
+                
+                }
+                else{
+                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                 
+                }
+                cs.executeQuery();
+                
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+        if (selectedType == "Lands")
+        {
+            try{
+                    cs = conn.prepareCall("{ call LandSearch(?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setString("inputSubstype", subtypeSearch.getText());                    
+                    cs.executeQuery();
+                
+                
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+    
+        if (selectedType == "Planeswalker")
+        {
+            try{
+                
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call InstantSearch(?,NULL,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputLoyalty", selectedBox1);
+                
+                }
+                if(selectedBox1 == -1){
+                    cs = conn.prepareCall("{ call InstantSearch(?,?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                
+                }
+                if(selectedCost == -1 && selectedBox1 == -1){
+                    cs = conn.prepareCall("{ call InstantSearch(?,NULL,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                
+                }   
+                else{
+                    cs = conn.prepareCall("{ call InstantSearch(?,?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                    cs.setInt("inputLoyalty", selectedBox1);
+                                 
+                }                
+                cs.executeQuery();
+                
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+        if (selectedType == "Sorceries")
+        {
+            try{
+                if(selectedCost == -1){
+                    cs = conn.prepareCall("{ call SorcerySearch(?,NULL)}");
+                    cs.setString("inputName", cardNameText.getText());
+                
+                }   
+                else{
+                    cs = conn.prepareCall("{ call InstantSearch(?,?)}");
+                    cs.setString("inputName", cardNameText.getText());
+                    cs.setInt("inputCost", selectedCost);
+                                
+                }  
+                cs.executeQuery();
+            }catch (SQLException ex){
+                Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
+
+            }    
+            
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void costDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costDropDownActionPerformed
         // TODO add your handling code here:
         costDropDown.setSize(366, 35);
+
+        int selectedCost = Integer.valueOf((String)costDropDown.getSelectedItem());
+
     }//GEN-LAST:event_costDropDownActionPerformed
+
+    private void extraBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraBox2ActionPerformed
+        // TODO add your handling code here:
+        extraBox2.setSize(366, 35);
+        int selectedValue1 = Integer.valueOf((String)costDropDown.getSelectedItem());
+    }//GEN-LAST:event_extraBox2ActionPerformed
+
+    private void extraBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraBox1ActionPerformed
+        // TODO add your handling code here:
+        extraBox1.setSize(366, 35);
+        int selectedValue2 = Integer.valueOf((String)costDropDown.getSelectedItem());        
+
+    }//GEN-LAST:event_extraBox1ActionPerformed
 
     private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeComboBoxActionPerformed
         // TODO add your handling code here:
         typeComboBox.setSize(366, 35);
         cardNameText.setSize(366, 35);
         costDropDown.setSize(366, 35);
-        typeSearch.setSize(366, 35);  
-        extraBox1.setSize(366, 35);   
-        extraBox2.setSize(366, 35);          
-        
-        Object selectedItem = typeComboBox.getSelectedItem();
-        selectedItem.toString();
-        //Unspecified, Artifacts, Creatures, Enchantments, Instants, Lands, Planeswalker, Sorceries
-        
+        subtypeSearch.setSize(366, 35);
+        extraBox1.setSize(366, 35);
+        extraBox2.setSize(366, 35);
 
-        if (selectedItem == "Unspecified")
+ 
+        Object selectedType = typeComboBox.getSelectedItem();
+        selectedType.toString();
+        //Unspecified, Artifacts, Creatures, Enchantments, Instants, Lands, Planeswalker, Sorceries
+
+        if (selectedType == "Unspecified")
         {
             extraBox1.setVisible(false);
+            label1.setVisible(false);
             extraBox2.setVisible(false);
-            typeSearch.setVisible(false);
-        }        
-        if (selectedItem == "Artifacts")
-        {
-            extraBox1.setVisible(false);
-            extraBox2.setVisible(false);
-            typeSearch.setVisible(true);
+            label2.setVisible(false);
+            subtypeSearch.setVisible(false);
 
         }
-        if (selectedItem == "Creatures")
+        if (selectedType == "Artifacts")
         {
+            extraBox1.setVisible(false);
+            label1.setVisible(false);
+            extraBox2.setVisible(false);
+            label2.setVisible(false);            
+            subtypeSearch.setVisible(true);
+
+        }
+        if (selectedType == "Creatures")
+        {
+            label1.setText("Power");
+            label1.setVisible(true);
+
+            label2.setText("Toughness");
+            label2.setVisible(true);
+
             extraBox1.setVisible(true);
             extraBox2.setVisible(true);
-            typeSearch.setVisible(true);
-            
+            subtypeSearch.setVisible(true);
+
         }
-        if (selectedItem == "Enchantments")
+        if (selectedType == "Enchantments")
         {
             extraBox1.setVisible(false);
+            label1.setVisible(false);
             extraBox2.setVisible(false);
-            typeSearch.setVisible(true);
+            label2.setVisible(false);
+            subtypeSearch.setVisible(true);
         }
-        if (selectedItem == "Instants")
+        if (selectedType == "Instants")
         {
             extraBox1.setVisible(false);
+            label1.setVisible(false);            
             extraBox2.setVisible(false);
-            typeSearch.setVisible(false);            
-        }        
-        if (selectedItem == "Lands")
+            label2.setVisible(false);            
+            subtypeSearch.setVisible(false);
+        }
+        if (selectedType == "Lands")
         {
             extraBox1.setVisible(false);
+            label1.setVisible(false);            
             extraBox2.setVisible(false);
-            typeSearch.setVisible(true);
-        }      
-        if (selectedItem == "Planeswalker")
+            label2.setVisible(false);            
+            subtypeSearch.setVisible(true);
+            costDropDown.setVisible(false);
+            Cost.setVisible(false);
+        }
+        if (selectedType == "Planeswalker")
         {
-            extraBox1.setVisible(true);    
+            label1.setText("Loyalty");
+            label1.setVisible(true);
+            extraBox1.setVisible(true);
             extraBox2.setVisible(false);
-            typeSearch.setVisible(true);            
-        }        
-        if (selectedItem == "Sorceries")
+            label2.setVisible(false);            
+            subtypeSearch.setVisible(true);
+        }
+        if (selectedType == "Sorceries")
         {
             extraBox1.setVisible(false);
+            label1.setVisible(false);            
             extraBox2.setVisible(false);
-            typeSearch.setVisible(false);            
-        }        
-        
+            label2.setVisible(false);            
+            subtypeSearch.setVisible(false);
+        }
+
     }//GEN-LAST:event_typeComboBoxActionPerformed
 
-    private void typeSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_typeSearchActionPerformed
-        
-        typeSearch.setSize(366, 35);        
-    }//GEN-LAST:event_typeSearchActionPerformed
+    private void cardNameTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cardNameTextActionPerformed
+
+        cardNameText.setSize(366, 35);
+    }//GEN-LAST:event_cardNameTextActionPerformed
 
     private void cardNameTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cardNameTextFocusGained
         cardNameText.addMouseListener(new MouseAdapter(){
-        public void mouseClicked(MouseEvent e){
-            cardNameText.setText("");
-        }
-    });
- 
+            public void mouseClicked(MouseEvent e){
+                cardNameText.setText("");
+            }
+        });
+
     }//GEN-LAST:event_cardNameTextFocusGained
 
-    private void typeSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_typeSearchFocusGained
-        typeSearch.addMouseListener(new MouseAdapter(){
-        public void mouseClicked(MouseEvent e){
-            typeSearch.setText("");
-        }
-    });
-        
-    }//GEN-LAST:event_typeSearchFocusGained
+    private void subtypeSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subtypeSearchActionPerformed
 
-    private void extraBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraBox1ActionPerformed
-        // TODO add your handling code here:
-        extraBox1.setSize(366, 35);        
-        
-    }//GEN-LAST:event_extraBox1ActionPerformed
+        subtypeSearch.setSize(366, 35);
+    }//GEN-LAST:event_subtypeSearchActionPerformed
 
-    private void extraBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extraBox2ActionPerformed
-        // TODO add your handling code here:
-        extraBox2.setSize(366, 35);        
-    }//GEN-LAST:event_extraBox2ActionPerformed
+    private void subtypeSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_subtypeSearchFocusGained
+        subtypeSearch.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                subtypeSearch.setText("");
+            }
+        });
+
+    }//GEN-LAST:event_subtypeSearchFocusGained
 
     /**
      * @param args the command line arguments
@@ -315,7 +631,10 @@ public class MainPage extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> extraBox1;
     private javax.swing.JComboBox<String> extraBox2;
     private javax.swing.JButton jButton1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JTextField subtypeSearch;
     private javax.swing.JComboBox<String> typeComboBox;
-    private javax.swing.JTextField typeSearch;
     // End of variables declaration//GEN-END:variables
 }
