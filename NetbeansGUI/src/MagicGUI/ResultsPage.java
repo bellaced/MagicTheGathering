@@ -5,6 +5,10 @@
  */
 package MagicGUI;
 
+import java.awt.Image;
+import java.io.File;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author bellaceds
@@ -16,10 +20,24 @@ public class ResultsPage extends javax.swing.JFrame {
      */
     public ResultsPage() {
         initComponents();
+        showImage(pos);
     }
     
+    int pos = 0;
+    
     public String[] getImages(){
-        //return imageList;
+        File file = new File(getClass().getResource("/Images").getFile());
+        String[] imageList = file.list();
+        return imageList;
+    }
+    
+    public void showImage(int index){
+        String[] imageList = getImages();
+        String imageName = imageList[index];
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Images" +imageName));
+        Image image = icon.getImage().getScaledInstance(jLabel_Image.getWidth(), jLabel_Image.getHeight(), Image.SCALE_SMOOTH);
+        jLabel_Image.setIcon(new ImageIcon(image));
+        
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +48,7 @@ public class ResultsPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1_Image = new javax.swing.JLabel();
+        jLabel_Image = new javax.swing.JLabel();
         FirstButton = new javax.swing.JButton();
         NextButton = new javax.swing.JButton();
         PreviousButton = new javax.swing.JButton();
@@ -65,7 +83,7 @@ public class ResultsPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1_Image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jLabel_Image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(FirstButton)
@@ -80,7 +98,7 @@ public class ResultsPage extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -145,6 +163,6 @@ public class ResultsPage extends javax.swing.JFrame {
     private javax.swing.JButton LastButton;
     private javax.swing.JButton NextButton;
     private javax.swing.JButton PreviousButton;
-    private javax.swing.JLabel jLabel1_Image;
+    private javax.swing.JLabel jLabel_Image;
     // End of variables declaration//GEN-END:variables
 }
