@@ -90,7 +90,7 @@ CREATE TABLE `Creatures` (
 
 LOCK TABLES `Creatures` WRITE;
 /*!40000 ALTER TABLE `Creatures` DISABLE KEYS */;
-INSERT INTO `Creatures` VALUES ('Abberant Researcher', 'Shadows over Innistrad', 'Human Insect', 4, 3, 2, 'Uncommon'), ('Accursed Witch', 'Shadows over Innistrad', 'Human Shaman', 4, 4, 2, 'Uncommon'), ('Altered Ego', 'Shadows over Innistrad', 'Shapeshifter', 4, 0, 0, 'Rare'), ('Angel of Deliverance', 'Shadows over Innistrad', 'Angel', 8, 6, 6, 'Rare'), ('Apothecary Geist', 'Shadows over Innistrad', 'Spirit', 4, 2, 3, 'Common'), ('Asylum Visitor', 'Shadows over Innistrad', 'Vampire Wizard', 2, 3, 1, 'Rare'), ('Bloodmad Vampire', 'Shadows over Innistrad', 'Vampire Beserker', 3, 4, 1, 'Common'), ('Briarbridge Patrol', 'Shadows over Innistrad', 'Human Warrior', 4, 3, 3, 'Uncommon') ;
+INSERT INTO `Creatures` VALUES ('Aberrant Researcher', 'Shadows over Innistrad', 'Human Insect', 4, 3, 2, 'Uncommon'), ('Accursed Witch', 'Shadows over Innistrad', 'Human Shaman', 4, 4, 2, 'Uncommon'), ('Altered Ego', 'Shadows over Innistrad', 'Shapeshifter', 4, 0, 0, 'Rare'), ('Angel of Deliverance', 'Shadows over Innistrad', 'Angel', 8, 6, 6, 'Rare'), ('Apothecary Geist', 'Shadows over Innistrad', 'Spirit', 4, 2, 3, 'Common'), ('Asylum Visitor', 'Shadows over Innistrad', 'Vampire Wizard', 2, 3, 1, 'Rare'), ('Bloodmad Vampire', 'Shadows over Innistrad', 'Vampire Beserker', 3, 4, 1, 'Common'), ('Briarbridge Patrol', 'Shadows over Innistrad', 'Human Warrior', 4, 3, 3, 'Uncommon') ;
 /*!40000 ALTER TABLE `Creatures` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -209,43 +209,69 @@ UNLOCK TABLES;
 
 CREATE PROCEDURE SearchAllByNameAndCost(IN inputName Char(50), IN inputCost INT)
 SELECT name
-FROM Lands, Planeswalker, Artifacts, Creatures, Sorceries, Enchantments, Instants
-WHERE (name like ('%' + inputName + '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL);
+FROM Lands
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL)
+UNION
+SELECT name
+FROM Enchantments
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+UNION
+SELECT name
+FROM Creatures
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+UNION
+SELECT name
+FROM Planeswalker
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+UNION
+SELECT name
+FROM Artifacts
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+UNION
+SELECT name
+FROM Instants
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+UNION
+SELECT name
+FROM Sorceries
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL);
+
+
 
 CREATE PROCEDURE SearchEnchantments(IN inputName CHAR(50), IN inputCost INT, IN inputSubtype CHAR(50))
 SELECT name
 FROM Enchantments
-WHERE (inputName IS NULL OR name = inputName) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
 
 CREATE PROCEDURE CreatureSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT, inputPower INT, IN inputToughness INT)
 SELECT name
-FROM Creature
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR costs = inputCost);
+FROM Creatures
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%', inputSubtype, '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR cost = inputCost);
 
 CREATE PROCEDURE ArtifactSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT)
 SELECT name
-FROM Artifact
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost);
+FROM Artifacts
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost);
 
 CREATE PROCEDURE LandSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50))
 SELECT name
-FROM Land
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
+FROM Lands
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
 
 CREATE PROCEDURE PlaneswalkerSearch(IN inputName CHAR(50),IN inputCost INT, IN inputLoyalty INT)
 SELECT name
 FROM Planeswalker
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputLoyalty IS NULL OR loyalty = inputLoyalty);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputLoyalty IS NULL OR loyalty = inputLoyalty);
 
 CREATE PROCEDURE SorcerySearch(IN inputName CHAR(50), IN inputCost INT)
 SELECT name
 FROM Sorceries
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%'))  AND (inputCost IS NULL OR costs = inputCost);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost);
 
 CREATE PROCEDURE InstantSearch(IN inputName CHAR(50), IN inputCost INT)
-SELECT imagepath
-FROM Instant
-WHERE (inputName IS NULL OR name like ('%' + inputName + '%'))  AND (inputCost IS NULL OR costs = inputCost);
+SELECT name
+FROM Instants
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost);
 
 
 

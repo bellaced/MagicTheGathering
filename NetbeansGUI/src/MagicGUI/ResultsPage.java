@@ -7,34 +7,48 @@ package MagicGUI;
 
 import java.awt.Image;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import java.util.List;
 
 /**
  *
  * @author bellaceds
  */
 public class ResultsPage extends javax.swing.JFrame {
+    
+    List<String> results = new ArrayList<>();
 
     /**
      * Creates new form ResultsPage
      */
     public ResultsPage() {
         initComponents();
-        showImage(pos);
+        //showImage(pos);
+    }
+    public ResultsPage(List<String> imageListInput){
+        initComponents();
+        //showImage(pos);
+        results = imageListInput;
+        
+        showImage(0);
     }
     
-    int pos = 0;
+   int pos = 0;
     
-    public String[] getImages(){
+   
+    
+//   
+    /*public String[] getImages(){
         File file = new File(getClass().getResource("/Images").getFile());
         String[] imageList = file.list();
         return imageList;
-    }
+    }*/
     
     public void showImage(int index){
-        String[] imageList = getImages();
-        String imageName = imageList[index];
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Images" +imageName));
+        
+        String imageName = results.get(index);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Images/" +imageName + ".full.jpg"));
         Image image = icon.getImage().getScaledInstance(jLabel_Image.getWidth(), jLabel_Image.getHeight(), Image.SCALE_SMOOTH);
         jLabel_Image.setIcon(new ImageIcon(image));
         
@@ -50,25 +64,30 @@ public class ResultsPage extends javax.swing.JFrame {
 
         jLabel_Image = new javax.swing.JLabel();
         FirstButton = new javax.swing.JButton();
-        NextButton = new javax.swing.JButton();
         PreviousButton = new javax.swing.JButton();
+        NextButt = new javax.swing.JButton();
         LastButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         FirstButton.setText("First");
-
-        NextButton.setText("Next");
-        NextButton.addActionListener(new java.awt.event.ActionListener() {
+        FirstButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NextButtonActionPerformed(evt);
+                FirstButtonActionPerformed(evt);
             }
         });
 
-        PreviousButton.setText("Previous");
+        PreviousButton.setText("Next");
         PreviousButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PreviousButtonActionPerformed(evt);
+            }
+        });
+
+        NextButt.setText("Previous");
+        NextButt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextButtActionPerformed(evt);
             }
         });
 
@@ -83,45 +102,68 @@ public class ResultsPage extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel_Image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(FirstButton)
-                .addGap(18, 18, 18)
-                .addComponent(NextButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 86, Short.MAX_VALUE)
-                .addComponent(PreviousButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(NextButt)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(PreviousButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LastButton)
                 .addContainerGap())
+            .addComponent(jLabel_Image, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jLabel_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(NextButt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(NextButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                        .addComponent(PreviousButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
-                        .addComponent(LastButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
-                    .addComponent(FirstButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(LastButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(PreviousButton, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FirstButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void NextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_NextButtonActionPerformed
-
     private void PreviousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreviousButtonActionPerformed
-        // TODO add your handling code here:
+
+        /*if(pos <= (results.size() -1));
+        {
+            pos = pos + 1;
+        }*/
+        pos = pos + 1;
+        if(pos > results.size()-1)
+        {
+            pos = pos - 1;
+        }
+
+        showImage(pos);
     }//GEN-LAST:event_PreviousButtonActionPerformed
 
+    private void NextButtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextButtActionPerformed
+        pos = pos - 1;
+        if(pos < 0) 
+        {
+            pos = 0;
+        }
+        showImage(pos);
+    }//GEN-LAST:event_NextButtActionPerformed
+
     private void LastButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LastButtonActionPerformed
-        // TODO add your handling code here:
+        pos = results.size() - 1;
+        showImage(pos);
     }//GEN-LAST:event_LastButtonActionPerformed
+
+    private void FirstButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FirstButtonActionPerformed
+        pos = 0;
+        showImage(pos);
+    }//GEN-LAST:event_FirstButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -161,7 +203,7 @@ public class ResultsPage extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton FirstButton;
     private javax.swing.JButton LastButton;
-    private javax.swing.JButton NextButton;
+    private javax.swing.JButton NextButt;
     private javax.swing.JButton PreviousButton;
     private javax.swing.JLabel jLabel_Image;
     // End of variables declaration//GEN-END:variables

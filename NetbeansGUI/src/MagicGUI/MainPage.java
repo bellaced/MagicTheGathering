@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import javax.swing.ComboBoxModel;
@@ -33,7 +34,8 @@ public class MainPage extends javax.swing.JFrame {
         Statement stmt;
         ResultSet rs;
         CallableStatement cs;
-        
+        List<String> results = new ArrayList<>();
+                                
     
     public MainPage() {
         initComponents();
@@ -76,7 +78,6 @@ public class MainPage extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(84, 84));
         getContentPane().setLayout(null);
 
-        cardNameText.setText("Name");
         cardNameText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 cardNameTextFocusGained(evt);
@@ -99,7 +100,7 @@ public class MainPage extends javax.swing.JFrame {
         getContentPane().add(jButton1);
         jButton1.setBounds(457, 523, 138, 52);
 
-        costDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "no preference", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
+        costDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "no preference", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
         costDropDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 costDropDownActionPerformed(evt);
@@ -122,7 +123,6 @@ public class MainPage extends javax.swing.JFrame {
         getContentPane().add(TypeLabel);
         TypeLabel.setBounds(12, 94, 978, 31);
 
-        subtypeSearch.setText("Subtype");
         subtypeSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 subtypeSearchFocusGained(evt);
@@ -203,19 +203,25 @@ public class MainPage extends javax.swing.JFrame {
         selectedBox2 -= 1;
                 
         
+        try{
+            conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost/magicthegathering?" +
+            "user=root&password=BeLLaceds1996&useInformationSchema=true");
+            // Do something with the connection.
+            stmt = conn.createStatement();
+        
         
         
         
         //start of if else based on selection at button 
         if (selectedType == "Unspecified")
         {
-
+            
             try{
                 
                 if(selectedCost == -1){
                     cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
-                
                 }
                 else{
                     cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?)}");
@@ -223,6 +229,11 @@ public class MainPage extends javax.swing.JFrame {
                     cs.setInt("inputCost", selectedCost);
                 }
                 cs.executeQuery();
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
                 
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
@@ -245,7 +256,12 @@ public class MainPage extends javax.swing.JFrame {
                     cs.setInt("inputCost", selectedCost);                    
                 }
                 cs.executeQuery();
+                rs = cs.getResultSet();
 
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
+                
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -256,48 +272,48 @@ public class MainPage extends javax.swing.JFrame {
         {
             try{
                 
-                if(selectedCost == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,?,?)}");
+                if(selectedCost == -1 && selectedBox1 > -1 && selectedBox2 > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,NULL,?,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     //cs.setInt("inputCost", selectedCost);
                     cs.setInt("inputPower", selectedBox1);
                     cs.setInt("inputToughness", selectedBox2);  
                 }
-                else if(selectedBox1 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,NULL,?)}");
+                else if(selectedBox1 == -1 && selectedBox2 > -1 && selectedCost > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,?,NULL,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     cs.setInt("inputCost", selectedCost);
                     //cs.setInt("inputPower", selectedBox1);
                     cs.setInt("inputToughness", selectedBox2);                  
                 }
-                else if(selectedBox2 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,?,NULL)}");
+                else if(selectedBox2 == -1 && selectedBox1 > -1 && selectedCost > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,?,?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     cs.setInt("inputCost", selectedCost);
                     cs.setInt("inputPower", selectedBox1);
                     //cs.setInt("inputToughness", selectedBox2);                     
                 }
-                else if(selectedCost == -1 && selectedBox1 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,NULL,?)}");
+                else if(selectedCost == -1 && selectedBox1 == -1 && selectedBox2 > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,NULL,NULL,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     //cs.setInt("inputCost", selectedCost);
                     //cs.setInt("inputPower", selectedBox1);
                     cs.setInt("inputToughness", selectedBox2);                     
                 }     
-                else if(selectedBox1 == -1 && selectedBox2 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,NULL,NULL)}");
+                else if(selectedBox1 == -1 && selectedBox2 == -1 && selectedCost > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,?,NULL,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     cs.setInt("inputCost", selectedCost);
                     //cs.setInt("inputPower", selectedBox1);
                     //cs.setInt("inputToughness", selectedBox2);                     
                 }      
-                else if(selectedCost == -1 && selectedBox2 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,?,NULL)}");
+                else if(selectedCost == -1 && selectedBox2 == -1 && selectedBox1 > -1){
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,NULL,?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     //cs.setInt("inputCost", selectedCost);
@@ -305,7 +321,7 @@ public class MainPage extends javax.swing.JFrame {
                     //cs.setInt("inputToughness", selectedBox2);                     
                 }                
                 else if(selectedCost == -1 && selectedBox1 == -1 && selectedBox2 == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL,NULL,NULL)}");
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,NULL,NULL,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     //cs.setInt("inputCost", selectedCost);
@@ -313,7 +329,7 @@ public class MainPage extends javax.swing.JFrame {
                     //cs.setInt("inputToughness", selectedBox2);                     
                 }                
                 else{
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?,?,?)}");
+                    cs = conn.prepareCall("{ call CreatureSearch(?,?,?,?,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubtype", subtypeSearch.getText());
                     cs.setInt("inputCost", selectedCost);
@@ -321,7 +337,12 @@ public class MainPage extends javax.swing.JFrame {
                     cs.setInt("inputToughness", selectedBox2);                     
                 }                
                 cs.executeQuery();
+                rs = cs.getResultSet();
 
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
+                
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -339,12 +360,17 @@ public class MainPage extends javax.swing.JFrame {
                 
                 }
                 else{
-                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?,?)}");
+                    cs = conn.prepareCall("{ call SearchEnchantments(?,?,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputCost", selectedCost);
                     cs.setString("inputSubtype", subtypeSearch.getText());                    
                 }
                 cs.executeQuery();
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
                 
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
@@ -362,12 +388,17 @@ public class MainPage extends javax.swing.JFrame {
                 
                 }
                 else{
-                    cs = conn.prepareCall("{ call SearchAllByNameAndCost(?,?)}");
+                    cs = conn.prepareCall("{ call InstantSearch(?,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputCost", selectedCost);
                  
                 }
                 cs.executeQuery();
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
                 
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
@@ -381,7 +412,11 @@ public class MainPage extends javax.swing.JFrame {
                     cs.setString("inputName", cardNameText.getText());
                     cs.setString("inputSubstype", subtypeSearch.getText());                    
                     cs.executeQuery();
-                
+                    rs = cs.getResultSet();
+
+                    while (rs.next()){
+                        results.add(rs.getString("name"));
+                    }                
                 
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
@@ -394,31 +429,35 @@ public class MainPage extends javax.swing.JFrame {
             try{
                 
                 if(selectedCost == -1){
-                    cs = conn.prepareCall("{ call InstantSearch(?,NULL,?)}");
+                    cs = conn.prepareCall("{ call PlaneswalkerSearch(?,NULL,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputLoyalty", selectedBox1);
                 
                 }
                 if(selectedBox1 == -1){
-                    cs = conn.prepareCall("{ call InstantSearch(?,?,NULL)}");
+                    cs = conn.prepareCall("{ call PlaneswalkerSearch(?,?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputCost", selectedCost);
                 
                 }
                 if(selectedCost == -1 && selectedBox1 == -1){
-                    cs = conn.prepareCall("{ call InstantSearch(?,NULL,NULL)}");
+                    cs = conn.prepareCall("{ call PlaneswalkerSearch(?,NULL,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                 
                 }   
                 else{
-                    cs = conn.prepareCall("{ call InstantSearch(?,?,NULL)}");
+                    cs = conn.prepareCall("{ call PlaneswalkerSearch(?,?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputCost", selectedCost);
                     cs.setInt("inputLoyalty", selectedBox1);
                                  
                 }                
                 cs.executeQuery();
-                
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }                
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
 
@@ -433,18 +472,32 @@ public class MainPage extends javax.swing.JFrame {
                 
                 }   
                 else{
-                    cs = conn.prepareCall("{ call InstantSearch(?,?)}");
+                    cs = conn.prepareCall("{ call SorcerySearch(?,?)}");
                     cs.setString("inputName", cardNameText.getText());
                     cs.setInt("inputCost", selectedCost);
                                 
                 }  
                 cs.executeQuery();
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                    results.add(rs.getString("name"));
+                }
+                
             }catch (SQLException ex){
                 Logger.getLogger(MainPage.class.getName()).log(Level.SEVERE, null, ex);
 
             }    
             
+        }  
+        
+        
+        }catch (SQLException ex){
+                System.out.println("SQLException: " + ex.getMessage());
         }
+        
+        this.dispose();
+        new ResultsPage(results).setVisible(true);        
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
