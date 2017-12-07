@@ -7,10 +7,16 @@ package MagicGUI;
 
 import java.awt.Image;
 import java.io.File;
+import java.sql.DriverManager;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import java.util.List;
-
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.DriverManager;
+import java.sql.SQLException; 
 /**
  *
  * @author bellaceds
@@ -18,6 +24,11 @@ import java.util.List;
 public class ResultsPage extends javax.swing.JFrame {
     
     List<String> results = new ArrayList<>();
+    Connection conn;
+    Statement stmt;
+    ResultSet rs;
+    CallableStatement cs;
+    List<String> ratings = new ArrayList<>();
 
     /**
      * Creates new form ResultsPage
@@ -31,7 +42,10 @@ public class ResultsPage extends javax.swing.JFrame {
         //showImage(pos);
         results = imageListInput;
         
-        showImage(0);
+        if (results.size() >= 1){
+           showImage(0);
+        }
+        
     }
     
    int pos = 0;
@@ -52,6 +66,35 @@ public class ResultsPage extends javax.swing.JFrame {
         Image image = icon.getImage().getScaledInstance(jLabel_Image.getWidth(), jLabel_Image.getHeight(), Image.SCALE_SMOOTH);
         jLabel_Image.setIcon(new ImageIcon(image));
         
+        cardIndex.setText("Displaying card result: " + (pos +1) + "/" + results.size());
+        
+        showRating(imageName);
+    }
+    
+    public void showRating(String name){
+            try{
+            conn = DriverManager.getConnection(
+            "jdbc:mysql://localhost/magicthegathering?" +
+            "user=root&password=BeLLaceds1996&useInformationSchema=true");
+            // Do something with the connection.
+            stmt = conn.createStatement();
+            
+                cs = conn.prepareCall("{ call Rating(?)}");
+                cs.setString("inputName", name);           
+                cs.executeQuery();
+                rs = cs.getResultSet();
+
+                while (rs.next()){
+                   int temp = rs.getInt("rating");
+                   String ratingText = Integer.toString(temp);
+                  ratingLabel.setText("Rating: " + ratingText);                     
+                }
+             
+            }catch (SQLException ex){
+    
+                System.out.println("SQLException: " + ex.getMessage());
+        
+            }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -62,11 +105,17 @@ public class ResultsPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jLabel_Image = new javax.swing.JLabel();
         FirstButton = new javax.swing.JButton();
         PreviousButton = new javax.swing.JButton();
         NextButt = new javax.swing.JButton();
         LastButton = new javax.swing.JButton();
+        cardIndex = new javax.swing.JLabel();
+        backButton = new javax.swing.JButton();
+        ratingLabel = new javax.swing.JLabel();
+
+        jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,27 +147,56 @@ public class ResultsPage extends javax.swing.JFrame {
             }
         });
 
+        cardIndex.setText("No Results");
+
+        backButton.setText("Back ");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backButtonActionPerformed(evt);
+            }
+        });
+
+        ratingLabel.setText("No Rating");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel_Image, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(FirstButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(NextButt)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(PreviousButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(LastButton)
-                .addContainerGap())
-            .addComponent(jLabel_Image, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(FirstButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(NextButt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 20, Short.MAX_VALUE)
+                        .addComponent(PreviousButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LastButton)
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(backButton)
+                        .addGap(18, 18, 18)
+                        .addComponent(cardIndex, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ratingLabel)
+                .addGap(131, 131, 131))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(3, 3, 3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(backButton)
+                    .addComponent(cardIndex, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_Image, javax.swing.GroupLayout.PREFERRED_SIZE, 429, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(ratingLabel)
+                .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(NextButt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -165,6 +243,12 @@ public class ResultsPage extends javax.swing.JFrame {
         showImage(pos);
     }//GEN-LAST:event_FirstButtonActionPerformed
 
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        new MainPage().setVisible(true);
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_backButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -205,6 +289,10 @@ public class ResultsPage extends javax.swing.JFrame {
     private javax.swing.JButton LastButton;
     private javax.swing.JButton NextButt;
     private javax.swing.JButton PreviousButton;
+    private javax.swing.JButton backButton;
+    private javax.swing.JLabel cardIndex;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel_Image;
+    public javax.swing.JLabel ratingLabel;
     // End of variables declaration//GEN-END:variables
 }

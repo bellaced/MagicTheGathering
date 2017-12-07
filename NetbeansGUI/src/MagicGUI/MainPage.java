@@ -39,6 +39,7 @@ public class MainPage extends javax.swing.JFrame {
     
     public MainPage() {
         initComponents();
+        this.setSize(900,700);
 
         Connection conn;
         Statement stmt;
@@ -78,6 +79,7 @@ public class MainPage extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(84, 84));
         getContentPane().setLayout(null);
 
+        cardNameText.setText("Name");
         cardNameText.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 cardNameTextFocusGained(evt);
@@ -98,7 +100,7 @@ public class MainPage extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton1);
-        jButton1.setBounds(457, 523, 138, 52);
+        jButton1.setBounds(340, 510, 138, 52);
 
         costDropDown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "no preference", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" }));
         costDropDown.addActionListener(new java.awt.event.ActionListener() {
@@ -123,6 +125,7 @@ public class MainPage extends javax.swing.JFrame {
         getContentPane().add(TypeLabel);
         TypeLabel.setBounds(12, 94, 978, 31);
 
+        subtypeSearch.setText("Subtype");
         subtypeSearch.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 subtypeSearchFocusGained(evt);
@@ -671,7 +674,9 @@ public class MainPage extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
                 new MainPage().setVisible(true);
+
             }
         });
     }

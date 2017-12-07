@@ -26,8 +26,10 @@ DROP TABLE IF EXISTS `Lands`;
 CREATE TABLE `Lands` (
   `name` char(50) DEFAULT NULL,
   `set` char(50) DEFAULT NULL,
+  `cost` int(4) DEFAULT NULL,  
   `subtype` char(30) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,7 +39,7 @@ CREATE TABLE `Lands` (
 
 LOCK TABLES `Lands` WRITE;
 /*!40000 ALTER TABLE `Lands` DISABLE KEYS */;
-INSERT INTO `Lands` VALUES ('Choked Estuary', 'Shadows over Innistrad', 'Island Swamp', 'Rare');
+INSERT INTO `Lands` VALUES ('Choked Estuary', 'Shadows over Innistrad', -1, 'Island Swamp', 'Rare', 5);
 /*!40000 ALTER TABLE `Lands` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +54,8 @@ CREATE TABLE `Artifacts` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(20) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -62,7 +65,7 @@ CREATE TABLE `Artifacts` (
 
 LOCK TABLES `Artifacts` WRITE;
 /*!40000 ALTER TABLE `Artifacts` DISABLE KEYS */;
-INSERT INTO `Artifacts` VALUES ('Brain in a Jar', 'Shadows over Innistrad', 2, 'Rare');
+INSERT INTO `Artifacts` VALUES ('Brain in a Jar', 'Shadows over Innistrad', 2, 'Rare', 4);
 /*!40000 ALTER TABLE `Artifacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,7 +83,8 @@ CREATE TABLE `Creatures` (
   `cost` int(11) DEFAULT NULL,
   `power` int(11) DEFAULT NULL,
   `toughness` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -90,7 +94,7 @@ CREATE TABLE `Creatures` (
 
 LOCK TABLES `Creatures` WRITE;
 /*!40000 ALTER TABLE `Creatures` DISABLE KEYS */;
-INSERT INTO `Creatures` VALUES ('Aberrant Researcher', 'Shadows over Innistrad', 'Human Insect', 4, 3, 2, 'Uncommon'), ('Accursed Witch', 'Shadows over Innistrad', 'Human Shaman', 4, 4, 2, 'Uncommon'), ('Altered Ego', 'Shadows over Innistrad', 'Shapeshifter', 4, 0, 0, 'Rare'), ('Angel of Deliverance', 'Shadows over Innistrad', 'Angel', 8, 6, 6, 'Rare'), ('Apothecary Geist', 'Shadows over Innistrad', 'Spirit', 4, 2, 3, 'Common'), ('Asylum Visitor', 'Shadows over Innistrad', 'Vampire Wizard', 2, 3, 1, 'Rare'), ('Bloodmad Vampire', 'Shadows over Innistrad', 'Vampire Beserker', 3, 4, 1, 'Common'), ('Briarbridge Patrol', 'Shadows over Innistrad', 'Human Warrior', 4, 3, 3, 'Uncommon') ;
+INSERT INTO `Creatures` VALUES ('Aberrant Researcher', 'Shadows over Innistrad', 'Human Insect', 4, 3, 2, 'Uncommon', 3), ('Accursed Witch', 'Shadows over Innistrad', 'Human Shaman', 4, 4, 2, 'Uncommon', 3), ('Altered Ego', 'Shadows over Innistrad', 'Shapeshifter', 4, 0, 0, 'Rare', 4), ('Angel of Deliverance', 'Shadows over Innistrad', 'Angel', 8, 6, 6, 'Rare', 2), ('Apothecary Geist', 'Shadows over Innistrad', 'Spirit', 4, 2, 3, 'Common', 3), ('Asylum Visitor', 'Shadows over Innistrad', 'Vampire Wizard', 2, 3, 1, 'Rare', 4), ('Bloodmad Vampire', 'Shadows over Innistrad', 'Vampire Beserker', 3, 4, 1, 'Common', 2), ('Briarbridge Patrol', 'Shadows over Innistrad', 'Human Warrior', 4, 3, 3, 'Uncommon', 2) ;
 /*!40000 ALTER TABLE `Creatures` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +109,8 @@ CREATE TABLE `Enchantments` (
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -115,7 +120,7 @@ CREATE TABLE `Enchantments` (
 
 LOCK TABLES `Enchantments` WRITE;
 /*!40000 ALTER TABLE `Enchantments` DISABLE KEYS */;
-INSERT INTO `Enchantments` VALUES ('Always Watching', 'Shadows over Innistrad', NULL, 3, 'Rare'), ('Behind the Scenes', 'Shadows over Innistrad', NULL, 3, 'Uncommon'), ('Bound by Moonsilver', 'Shadows over Innistrad', 'Aura', 3, 'Uncommon');
+INSERT INTO `Enchantments` VALUES ('Always Watching', 'Shadows over Innistrad', NULL, 3, 'Rare', 4), ('Behind the Scenes', 'Shadows over Innistrad', NULL, 3, 'Uncommon', 2), ('Bound by Moonsilver', 'Shadows over Innistrad', 'Aura', 3, 'Uncommon', 3);
 /*!40000 ALTER TABLE `Enchantments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +135,8 @@ CREATE TABLE `Sorceries` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,7 +146,7 @@ CREATE TABLE `Sorceries` (
 
 LOCK TABLES `Sorceries` WRITE;
 /*!40000 ALTER TABLE `Sorceries` DISABLE KEYS */;
-INSERT INTO `Sorceries` VALUES ('Alms of the Vein', 'Shadows over Innistrad', 3, 'Common'), ('Angelic Purge', 'Shadows over Innistrad', 3, 'Common'), ('Avacyns Judgment', 'Shadows over Innistrad', 2, 'Rare'), ('Behold the Beyond', 'Shadows over Innistrad', 7, 'Mythic Rare'), ('Biting Rain', 'Shadows over Innistrad', 4, 'Uncommon');
+INSERT INTO `Sorceries` VALUES ('Alms of the Vein', 'Shadows over Innistrad', 3, 'Common', 3), ('Angelic Purge', 'Shadows over Innistrad', 3, 'Common', 3), ('Avacyns Judgment', 'Shadows over Innistrad', 2, 'Rare', 5), ('Behold the Beyond', 'Shadows over Innistrad', 7, 'Mythic Rare', 2), ('Biting Rain', 'Shadows over Innistrad', 4, 'Uncommon', 3);
 /*!40000 ALTER TABLE `Sorceries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -154,7 +160,8 @@ CREATE TABLE `Instants` (
   `name` char(20) DEFAULT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -164,7 +171,7 @@ CREATE TABLE `Instants` (
 
 LOCK TABLES `Instants` WRITE;
 /*!40000 ALTER TABLE `Instants` DISABLE KEYS */;
-INSERT INTO `Instants` VALUES ('Aim High', 'Shadows over Innistrad', 2, 'Common'), ('Anguished Unmaking', 'Shadows over Innistrad', 3, 'Rare');
+INSERT INTO `Instants` VALUES ('Aim High', 'Shadows over Innistrad', 2, 'Common', 2), ('Anguished Unmaking', 'Shadows over Innistrad', 3, 'Rare', 5);
 /*!40000 ALTER TABLE `Instants` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +186,8 @@ CREATE TABLE `Planeswalker` (
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
-  `rarity` char(20) DEFAULT NULL
+  `rarity` char(20) DEFAULT NULL,
+  `rating` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -189,7 +197,7 @@ CREATE TABLE `Planeswalker` (
 
 LOCK TABLES `Planeswalker` WRITE;
 /*!40000 ALTER TABLE `Planeswalker` DISABLE KEYS */;
-INSERT INTO `Planeswalker` VALUES ('Arlinn Kord', 'Shadows over Innistrad', 4, 3, 'Mythic Rare');
+INSERT INTO `Planeswalker` VALUES ('Arlinn Kord', 'Shadows over Innistrad', 4, 3, 'Mythic Rare', 3);
 /*!40000 ALTER TABLE `Planeswalker` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -208,70 +216,103 @@ UNLOCK TABLES;
 -- procedures
 
 CREATE PROCEDURE SearchAllByNameAndCost(IN inputName Char(50), IN inputCost INT)
-SELECT name
+SELECT name, rating
 FROM Lands
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Enchantments
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Creatures
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Planeswalker
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Artifacts
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Instants
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
 UNION
-SELECT name
+SELECT name, rating
 FROM Sorceries
-WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL);
-
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) AND (inputCost = cost OR inputCost IS NULL)
+ORDER BY rating DESC;
 
 
 CREATE PROCEDURE SearchEnchantments(IN inputName CHAR(50), IN inputCost INT, IN inputSubtype CHAR(50))
-SELECT name
+SELECT name, rating
 FROM Enchantments
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'))
+ORDER BY rating DESC;
 
 CREATE PROCEDURE CreatureSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT, inputPower INT, IN inputToughness INT)
-SELECT name
+SELECT name, rating
 FROM Creatures
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%', inputSubtype, '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR cost = inputCost);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%', inputSubtype, '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR cost = inputCost)
+ORDER BY rating DESC;
 
 CREATE PROCEDURE ArtifactSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT)
-SELECT name
+SELECT name, rating
 FROM Artifacts
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost)
+ORDER BY rating DESC;
 
 CREATE PROCEDURE LandSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50))
-SELECT name
+SELECT name, rating
 FROM Lands
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'));
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'))
+ORDER BY rating DESC;
 
 CREATE PROCEDURE PlaneswalkerSearch(IN inputName CHAR(50),IN inputCost INT, IN inputLoyalty INT)
-SELECT name
+SELECT name, rating
 FROM Planeswalker
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputLoyalty IS NULL OR loyalty = inputLoyalty);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputLoyalty IS NULL OR loyalty = inputLoyalty)
+ORDER BY rating DESC;
 
 CREATE PROCEDURE SorcerySearch(IN inputName CHAR(50), IN inputCost INT)
-SELECT name
+SELECT name, rating
 FROM Sorceries
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost)
+ORDER BY rating DESC;
 
 CREATE PROCEDURE InstantSearch(IN inputName CHAR(50), IN inputCost INT)
-SELECT name
+SELECT name, rating
 FROM Instants
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost);
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%'))  AND (inputCost IS NULL OR cost = inputCost)
+ORDER BY rating DESC;
 
-
-
+CREATE PROCEDURE Rating(IN inputName CHAR(50))
+SELECT rating
+FROM Lands
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL)
+UNION
+SELECT rating
+FROM Enchantments
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) 
+UNION
+SELECT rating
+FROM Creatures
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) 
+UNION
+SELECT rating
+FROM Planeswalker
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) 
+UNION
+SELECT rating
+FROM Artifacts
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) 
+UNION
+SELECT rating
+FROM Instants
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL) 
+UNION
+SELECT rating
+FROM Sorceries
+WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL);
