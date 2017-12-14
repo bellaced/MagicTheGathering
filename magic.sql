@@ -19,14 +19,31 @@
 -- Table structure for table `Lands`
 --
 
+DROP TABLE IF EXISTS `Sets`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `Sets` (
+  `set` char(50) PRIMARY KEY NOT NULL,
+  `year` int(4) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+LOCK TABLES `Sets` WRITE;
+/*!40000 ALTER TABLE `Lands` DISABLE KEYS */;
+INSERT INTO `Sets` VALUES ('Shadows over Innistrad', '2016');
+/*!40000 ALTER TABLE `Lands` ENABLE KEYS */;
+UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `Lands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Lands` (
   `name` char(50) PRIMARY KEY NOT NULL,
-  `set` char(50) DEFAULT NULL,
-  `cost` int(4) DEFAULT NULL,  
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
+  `cost` int(4) DEFAULT NULL,
   `subtype` char(30) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
   `rating` int(1) DEFAULT NULL
@@ -52,7 +69,9 @@ DROP TABLE IF EXISTS `Artifacts`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Artifacts` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `cost` int(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
   `rating` int(1) DEFAULT NULL
@@ -78,7 +97,9 @@ DROP TABLE IF EXISTS `Creatures`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Creatures` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(50) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `power` int(11) DEFAULT NULL,
@@ -106,7 +127,9 @@ DROP TABLE IF EXISTS `Enchantments`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Enchantments` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
@@ -133,7 +156,9 @@ DROP TABLE IF EXISTS `Sorceries`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Sorceries` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `cost` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
   `rating` int(1) DEFAULT NULL
@@ -158,7 +183,9 @@ DROP TABLE IF EXISTS `Instants`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Instants` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `cost` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
   `rating` int(1) DEFAULT NULL
@@ -183,7 +210,9 @@ DROP TABLE IF EXISTS `Planeswalker`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Planeswalker` (
   `name` char(20) PRIMARY KEY NOT NULL,
-  `set` char(20) DEFAULT NULL,
+  `set` char(50) REFERENCES Sets(set)
+  ON DELETE SET NULL
+  ON UPDATE CASCADE,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
