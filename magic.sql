@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `Lands`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Lands` (
-  `name` char(50) DEFAULT NULL,
+  `name` char(50) PRIMARY KEY NOT NULL,
   `set` char(50) DEFAULT NULL,
   `cost` int(4) DEFAULT NULL,  
   `subtype` char(30) DEFAULT NULL,
@@ -51,7 +51,7 @@ DROP TABLE IF EXISTS `Artifacts`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Artifacts` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(20) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE `Artifacts` (
 
 LOCK TABLES `Artifacts` WRITE;
 /*!40000 ALTER TABLE `Artifacts` DISABLE KEYS */;
-INSERT INTO `Artifacts` VALUES ('Brain in a Jar', 'Shadows over Innistrad', 2, 'Rare', 4);
+INSERT INTO `Artifacts` VALUES ('Brain in a Jar', 'Shadows over Innistrad', 2, 'Rare', 4), ('Tamiyos Journal', 'Shadows over Innistrad', 5, 'Rare', 5);
 /*!40000 ALTER TABLE `Artifacts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -77,7 +77,7 @@ DROP TABLE IF EXISTS `Creatures`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Creatures` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(50) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
@@ -105,7 +105,7 @@ DROP TABLE IF EXISTS `Enchantments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Enchantments` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(20) DEFAULT NULL,
   `subtype` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
@@ -132,7 +132,7 @@ DROP TABLE IF EXISTS `Sorceries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Sorceries` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
@@ -157,7 +157,7 @@ DROP TABLE IF EXISTS `Instants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Instants` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `rarity` char(20) DEFAULT NULL,
@@ -182,7 +182,7 @@ DROP TABLE IF EXISTS `Planeswalker`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Planeswalker` (
-  `name` char(20) DEFAULT NULL,
+  `name` char(20) PRIMARY KEY NOT NULL,
   `set` char(20) DEFAULT NULL,
   `cost` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
@@ -249,7 +249,7 @@ ORDER BY rating DESC;
 CREATE PROCEDURE SearchEnchantments(IN inputName CHAR(50), IN inputCost INT, IN inputSubtype CHAR(50))
 SELECT name, rating
 FROM Enchantments
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'))
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%' + inputSubtype + '%'))
 ORDER BY rating DESC;
 
 CREATE PROCEDURE CreatureSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT, inputPower INT, IN inputToughness INT)
@@ -258,16 +258,16 @@ FROM Creatures
 WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%', inputSubtype, '%')) AND (inputPower IS NULL OR power = inputPower) AND (inputToughness IS NULL OR toughness = inputToughness) AND (inputCost IS NULL OR cost = inputCost)
 ORDER BY rating DESC;
 
-CREATE PROCEDURE ArtifactSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50), IN inputCost INT)
+CREATE PROCEDURE ArtifactSearch(IN inputName CHAR(50), IN inputCost INT)
 SELECT name, rating
 FROM Artifacts
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%')) AND (inputCost IS NULL OR costs = inputCost)
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputCost IS NULL OR cost = inputCost)
 ORDER BY rating DESC;
 
 CREATE PROCEDURE LandSearch(IN inputName CHAR(50),IN inputSubtype CHAR(50))
 SELECT name, rating
 FROM Lands
-WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype like ('%' + inputSubtype + '%'))
+WHERE (inputName IS NULL OR name LIKE CONCAT('%', inputName, '%')) AND (inputSubtype IS NULL OR subtype LIKE CONCAT('%', inputSubtype, '%'))
 ORDER BY rating DESC;
 
 CREATE PROCEDURE PlaneswalkerSearch(IN inputName CHAR(50),IN inputCost INT, IN inputLoyalty INT)
@@ -316,3 +316,24 @@ UNION
 SELECT rating
 FROM Sorceries
 WHERE (name LIKE CONCAT('%', inputName, '%') OR inputName is NULL);
+
+CREATE INDEX CreatureName 
+ON Creatures(name);
+
+CREATE INDEX ArtifactName 
+ON Artifacts(name);
+
+CREATE INDEX LandsName 
+ON Lands(name);
+
+CREATE INDEX EnchantmentsName 
+ON Enchantments(name);
+
+CREATE INDEX InstantsName 
+ON Instants(name);
+
+CREATE INDEX SorceriesName 
+ON Sorceries(name);
+
+CREATE INDEX PlaneswalkerName 
+ON Planeswalker(name);

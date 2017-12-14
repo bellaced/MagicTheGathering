@@ -248,14 +248,12 @@ public class MainPage extends javax.swing.JFrame {
         {
             try{
                 if(selectedCost == -1){
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,NULL)}");
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
-                    cs.setString("inputSubtype", subtypeSearch.getText());
                 }
                 else{
-                    cs = conn.prepareCall("{ call ArtifactSearch(?,?,?)}");
+                    cs = conn.prepareCall("{ call ArtifactSearch(?,?)}");
                     cs.setString("inputName", cardNameText.getText());
-                    cs.setString("inputSubtype", subtypeSearch.getText());
                     cs.setInt("inputCost", selectedCost);                    
                 }
                 cs.executeQuery();
@@ -357,16 +355,15 @@ public class MainPage extends javax.swing.JFrame {
             try{
                 
                 if(selectedCost == -1){
-                    cs = conn.prepareCall("{ call SearchEnchantments(?,NULL,?)}");
+                    cs = conn.prepareCall("{ call SearchEnchantments(?,NULL)}");
                     cs.setString("inputName", cardNameText.getText());
-                    cs.setString("inputSubtype", subtypeSearch.getText());
+
                 
                 }
                 else{
-                    cs = conn.prepareCall("{ call SearchEnchantments(?,?,?)}");
+                    cs = conn.prepareCall("{ call SearchEnchantments(?,?)}");
                     cs.setString("inputName", cardNameText.getText());
-                    cs.setInt("inputCost", selectedCost);
-                    cs.setString("inputSubtype", subtypeSearch.getText());                    
+                    cs.setInt("inputCost", selectedCost);                  
                 }
                 cs.executeQuery();
                 rs = cs.getResultSet();
@@ -554,7 +551,7 @@ public class MainPage extends javax.swing.JFrame {
             label1.setVisible(false);
             extraBox2.setVisible(false);
             label2.setVisible(false);            
-            subtypeSearch.setVisible(true);
+            subtypeSearch.setVisible(false);
 
         }
         if (selectedType == "Creatures")
